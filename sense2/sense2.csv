@@ -1,5 +1,9 @@
 senseid,phoneid,path,area,arrtibute,score
-2,1,C:/Users/37151/Desktop/tkinter/sense2/1.jpg,"(1716, 742, 2996, 1462)",detail,0.0
-2,2,C:/Users/37151/Desktop/tkinter/sense2/2.jpg,"(1716, 742, 2996, 1462)",detail,0.0
-2,3,C:/Users/37151/Desktop/tkinter/sense2/3.jpg,"(1716, 742, 2996, 1462)",detail,0.0
-2,4,C:/Users/37151/Desktop/tkinter/sense2/4.jpg,"(1716, 742, 2996, 1462)",detail,0.0
+sense2,1,C:/Users/37151/Desktop/tkinter/sense2/1.jpg,"(2017, 685, 2395, 961)",color,3.5
+sense2,1,C:/Users/37151/Desktop/tkinter/sense2/1.jpg,"(2540, 638, 2861, 973)",detail,4.5
+sense2,2,C:/Users/37151/Desktop/tkinter/sense2/2.jpg,"(2231, 848, 2609, 1124)",color,2.0
+sense2,2,C:/Users/37151/Desktop/tkinter/sense2/2.jpg,"(2777, 797, 3098, 1132)",detail,5.0
+sense2,3,C:/Users/37151/Desktop/tkinter/sense2/3.jpg,"(2210, 851, 2588, 1127)",color,3.5
+sense2,3,C:/Users/37151/Desktop/tkinter/sense2/3.jpg,"(2772, 801, 3093, 1136)",detail,5.0
+sense2,4,C:/Users/37151/Desktop/tkinter/sense2/4.jpg,"(2161, 822, 2539, 1098)",color,3.0
+sense2,4,C:/Users/37151/Desktop/tkinter/sense2/4.jpg,"(2701, 765, 3022, 1100)",detail,5.0

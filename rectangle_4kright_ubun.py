@@ -1,4 +1,4 @@
-
+#coding=utf-8
 import cv2
 from PIL import Image, ImageTk
 import numpy as np
@@ -30,6 +30,7 @@ def getfilesname(path):
     filesname =[]
     if(path != '' and path != ()):
         dirs = os.listdir(path)
+        print(dirs)
         for i in dirs:
             if os.path.splitext(i)[1] == ".jpg" or os.path.splitext(i)[1] == ".png" or os.path.splitext(i)[1] == ".JPG" or os.path.splitext(i)[1] == ".jpeg":
                 filesname+=[path+'/'+i]
@@ -56,15 +57,25 @@ def selectPath():
     if(data != []):
         save()
     oldpath = path
+
     path = tkinter.filedialog.askdirectory() 
+    print(path)
     filesname = getfilesname(path)
 
+    error = 0
     #判断文件夹是否合法
     while(len(filesname) == 0 or len(filesname)%4 != 0):
         path = tkinter.filedialog.askdirectory()
         filesname = getfilesname(path)
+        # error += 1
+        # if(error>=5):
+        #     break
     pathh.set(path)
+    # if(path != oldpath):
+    #     data = []
+
     filesname = getfilesname(path)
+    #print(filesname)
     senseid = path.split('/')[-1]
     phoneidstart = 1
 
@@ -75,7 +86,7 @@ def selectPath():
     img4 = cv2.imread(filesname[3],0)
     
     img_open1 = Image.open(filesname[0])
-    #print(img_open1)
+    print(img_open1)
     img_open2 = Image.open(filesname[1])
     img_open3 = Image.open(filesname[2])
     img_open4 = Image.open(filesname[3])
@@ -269,12 +280,12 @@ def scaler(event):
 
             oldscale = scale
 
-            if(event.delta > 0 and oldscale >1):
+            if(event.num == 4 and oldscale >1):
                 scale = max(oldscale-1,1)
                 boxx[0] = boxx[0] + event.x
                 boxx[1] = boxx[1] + event.y
         
-            if(event.delta < 0 and oldscale < maxscale):
+            if(event.num == 5 and oldscale < maxscale):
                 scale = min(oldscale+1,maxscale)
                 if (boxx[0] - event.x <0):
                     boxx[0]=0
@@ -918,7 +929,7 @@ def marking(event):
     finally:
         marktop = tk.Toplevel(window,takefocus=True)
     #abc = str(int(w_win*0.2))+'x'+ str(int(h_win*0.2))
-    marktop.geometry('{}x{}+{}+{}'.format(int(w_win*0.2),int(h_win*0.24), int(w_win*0.4), int(h_win*0.4))) 
+    marktop.geometry('{}x{}+{}+{}'.format(int(w_win*0.2),int(h_win*0.2), int(w_win*0.4), int(h_win*0.4))) 
 
     tk.Label(marktop,text='评分属性：').place(x=0, y=0, anchor='nw')
     cmb = ttk.Combobox(marktop)
@@ -952,7 +963,7 @@ def marking(event):
     mark4.place(x=0.01*w_win, y=0.18*h_win, anchor='w')
 
     b = tk.Button(marktop, text='上传打分（Ctrl+u）',  command=upload)
-    b.place(x=0.1*w_win, y=0.2*h_win, anchor='n')
+    b.place(x=0.2*w_win, y=0, anchor='ne')
 
     marktop.bind('<Control-Key-u>',upload_key)
 
@@ -962,7 +973,7 @@ window.title('My Window')
 w_win = window.winfo_screenwidth()
 h_win = window.winfo_screenheight()
 
-#print(w_win,h_win)
+print(w_win,h_win)
 big = str(w_win) + 'x' + str(h_win)
 window.geometry(big) 
 
@@ -1009,7 +1020,7 @@ if (img1.shape[0]>img1.shape[1]):
 
 w_img = img1.shape[1]
 h_img = img1.shape[0]
-#print(img_open1)
+print(img_open1)
 
 # img1 = cv2.cvtColor(np.asarray(img_open1), cv2.COLOR_RGB2BGR)
 # img2 = cv2.cvtColor(np.asarray(img_open2), cv2.COLOR_RGB2BGR)
@@ -1129,7 +1140,8 @@ b1.place(x=0.91*w_win, y=0.025*h_win, anchor='w')
 # Lab.place(x=0.85*w_win, y=0.75*h_win, anchor='w')
 
 
-window.bind("<MouseWheel>",scaler)
+window.bind("<Button-4>",scaler)
+window.bind("<Button-5>",scaler)
 window.bind("<B1-Motion>",drag)
 window.bind("<ButtonRelease-1>",locclear)
 window.bind('<Control-Key-m>',update_key)

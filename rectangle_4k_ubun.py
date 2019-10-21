@@ -17,18 +17,11 @@ window = tk.Tk()   #创建根窗口
  
 top = tk.Toplevel(window)   #创建顶层窗口，用于在双击时弹窗显示点击的图片
 top.destroy()   #顶层窗口暂时不用，双击时才会弹出
-marktop = tk.Toplevel(window)   #创建顶层窗口，用于在双击时弹窗显示点击的图片
-cmb = ttk.Combobox(marktop)
-marktop.destroy()   #顶层窗口暂时不用，双击时才会弹出
-var1 = tk.DoubleVar() 
-var2 = tk.DoubleVar() 
-var3 = tk.DoubleVar() 
-var4 = tk.DoubleVar() 
 
 #该函数通过文件夹的路径path可以生成一个数组，数组的元素均为文件夹下每一张图片的绝对路径
 def getfilesname(path):
     filesname =[]
-    if(path != '' and path != ()):
+    if(path != ''):
         dirs = os.listdir(path)
         for i in dirs:
             if os.path.splitext(i)[1] == ".jpg" or os.path.splitext(i)[1] == ".png" or os.path.splitext(i)[1] == ".JPG" or os.path.splitext(i)[1] == ".jpeg":
@@ -53,19 +46,16 @@ def selectPath():
     global data
     global flag
     
-    if(data != []):
-        save()
-    oldpath = path
+    data = []  #这两行用于单独存放
     path = tkinter.filedialog.askdirectory() 
     filesname = getfilesname(path)
 
     #判断文件夹是否合法
     while(len(filesname) == 0 or len(filesname)%4 != 0):
         path = tkinter.filedialog.askdirectory()
-        filesname = getfilesname(path)
     pathh.set(path)
     filesname = getfilesname(path)
-    senseid = path.split('/')[-1]
+    senseid += 1
     phoneidstart = 1
 
     # #用于match算法
@@ -75,7 +65,7 @@ def selectPath():
     img4 = cv2.imread(filesname[3],0)
     
     img_open1 = Image.open(filesname[0])
-    #print(img_open1)
+    print(img_open1)
     img_open2 = Image.open(filesname[1])
     img_open3 = Image.open(filesname[2])
     img_open4 = Image.open(filesname[3])
@@ -582,16 +572,16 @@ def previous_key(event):
 def upload():
     #global var1,var2,var3,var4
     global box,box2,box3,box4,scale
-    global marktop
     global filesname
     global senseid,phoneidstart
     global data
+    global count
     global flag
     global rect_box,flag,rect1,rect2,rect3,rect4
-    # count+=1
-    # qwer = tk.Label(window,font=('Arial', 12),bg='green')
-    # qwer.place(x=0.67*w_win, y=0.025*h_win, anchor='w')
-    # qwer["text"]=str(count)+"ok"
+    count+=1
+    qwer = tk.Label(window,font=('Arial', 12),bg='green')
+    qwer.place(x=0.67*w_win, y=0.025*h_win, anchor='w')
+    qwer["text"]=str(count)+"ok"
     if(flag == 0):
         c = [box,box2,box3,box4]
     else:
@@ -639,21 +629,20 @@ def upload():
     if(flag==1):
         changemode()
     #tk.Label(window,text = "ok").place(x=0.55*w_win, y=0.025*h_win, anchor='w')
-    marktop.destroy()
     print(data)
 def upload_key(event):
     #global var1,var2,var3,var4
     global box,box2,box3,box4,scale
-    global marktop
     global filesname
     global senseid,phoneidstart
     global data
+    global count
     global flag
     global rect_box,flag,rect1,rect2,rect3,rect4
-    # count+=1
-    # qwer = tk.Label(window,font=('Arial', 12),bg='green')
-    # qwer.place(x=0.67*w_win, y=0.025*h_win, anchor='w')
-    # qwer["text"]=str(count)+"ok"
+    count+=1
+    qwer = tk.Label(window,font=('Arial', 12),bg='green')
+    qwer.place(x=0.67*w_win, y=0.025*h_win, anchor='w')
+    qwer["text"]=str(count)+"ok"
     if(flag == 0):
         c = [box,box2,box3,box4]
     else:
@@ -701,9 +690,7 @@ def upload_key(event):
     if(flag==1):
         changemode()
     #tk.Label(window,text = "ok").place(x=0.55*w_win, y=0.025*h_win, anchor='w')
-    marktop.destroy()
     print(data)
-
 
 #用于提交最终打分结果
 #两个部分：将全局的data数据输出为json或csv文件
@@ -712,7 +699,7 @@ def save():
     global data
     global senseid
     data = sorted(data)
-    jsonfile=open(path+'/'+senseid+'.json','w')
+    jsonfile=open(path+'/sense'+str(senseid)+'.json','w')
     dataa = []
     for i in range(len(data)):
         senseid = data[i][0]
@@ -741,18 +728,18 @@ def save():
 
     
     name_attribute = ['senseid','phoneid','path','area','arrtibute','score']
-    csvFile = open(path+'/'+senseid+'.csv', "w",newline='')
+    csvFile = open(path+'/sense'+str(senseid)+'.csv', "w",newline='')
     writer = csv.writer(csvFile)
     writer.writerow(name_attribute)
     for i in range(len(data)):
         writer.writerow(data[i])
-    data = []
+    
     tkinter.messagebox.showwarning(message='保存成功')  
 def save_key(event):
     global path
     global data
     data = sorted(data)
-    jsonfile=open(path+'/'+senseid+'.json','w')
+    jsonfile=open(path+'/sense'+str(senseid)+'.json','w')
     dataa = []
     for i in range(len(data)):
         senseid = data[i][0]
@@ -781,12 +768,12 @@ def save_key(event):
 
     
     name_attribute = ['senseid','phoneid','path','area','arrtibute','score']
-    csvFile = open(path+'/'+senseid+'.csv', "w",newline='')
+    csvFile = open(path+'/sense'+str(senseid)+'.csv', "w",newline='')
     writer = csv.writer(csvFile)
     writer.writerow(name_attribute)
     for i in range(len(data)):
         writer.writerow(data[i])
-    data = []
+    
     tkinter.messagebox.showwarning(message='保存成功')  
 
 
@@ -910,66 +897,20 @@ def key_nextpic(event):
     dis_canvas.place(x=0.5*w_win, y=0.5*h_win, anchor='center')
     #label1.delete()
     tk.Label(top,text = whichpic,bg='green',font=('Arial', 50)).place(x=0.05*w_win, y=0.05*h_win, anchor='se')
-def marking(event):
-    global marktop
-    global var1,var2,var3,var4,cmb
-    try:
-        marktop.destroy()    
-    finally:
-        marktop = tk.Toplevel(window,takefocus=True)
-    #abc = str(int(w_win*0.2))+'x'+ str(int(h_win*0.2))
-    marktop.geometry('{}x{}+{}+{}'.format(int(w_win*0.2),int(h_win*0.24), int(w_win*0.4), int(h_win*0.4))) 
-
-    tk.Label(marktop,text='评分属性：').place(x=0, y=0, anchor='nw')
-    cmb = ttk.Combobox(marktop)
-    cmb.place(x=0.04*w_win, y=0, anchor='nw')
-    # 设置下拉菜单中的值
-    cmb['value'] = ('noise','detail','expor','color')
-
-    tk.Label(marktop,text='1',bg='green').place(x=0, y=0.058*h_win, anchor='w')
-    var1 = tk.DoubleVar()  
-    var1.set(2.5) 
-    #mark1 = tk.Scale(window,from_=0,  to=5,  resolution=0.5, orient=tk.HORIZONTAL , variable=var1 ,length = 300,showvalue=1,tickinterval=0.5)
-    mark1 = tk.Scale(marktop,from_=0,  to=5,  resolution=0.5, orient=tk.HORIZONTAL , variable=var1 ,length = int(w_win*0.185),showvalue=0,tickinterval=0.5)
-    mark1.place(x=0.01*w_win, y=0.058*h_win, anchor='w')
-
-    tk.Label(marktop,text='2',bg='green').place(x=0, y=0.1*h_win, anchor='w')
-    var2 = tk.DoubleVar()
-    var2.set(2.5) 
-    mark2 = tk.Scale(marktop,from_=0,  to=5,  resolution=0.5, orient=tk.HORIZONTAL , variable=var2,length = int(w_win*0.185),showvalue=0,tickinterval=0.5)
-    mark2.place(x=0.01*w_win, y=0.10*h_win, anchor='w')
-
-    tk.Label(marktop,text='3',bg='green').place(x=0, y=0.14*h_win, anchor='w')
-    var3 = tk.DoubleVar()  
-    var3.set(2.5) 
-    mark3 = tk.Scale(marktop,from_=0,  to=5,  resolution=0.5, orient=tk.HORIZONTAL , variable=var3,length = int(w_win*0.185),showvalue=0,tickinterval=0.5)
-    mark3.place(x=0.01*w_win, y=0.14*h_win, anchor='w')
-
-    tk.Label(marktop,text='4',bg='green').place(x=0, y=0.18*h_win, anchor='w')
-    var4 = tk.DoubleVar() 
-    var4.set(2.5) 
-    mark4 = tk.Scale(marktop,from_=0,  to=5,  resolution=0.5, orient=tk.HORIZONTAL , variable=var4,length = int(w_win*0.185),showvalue=0,tickinterval=0.5)
-    mark4.place(x=0.01*w_win, y=0.18*h_win, anchor='w')
-
-    b = tk.Button(marktop, text='上传打分（Ctrl+u）',  command=upload)
-    b.place(x=0.1*w_win, y=0.2*h_win, anchor='n')
-
-    marktop.bind('<Control-Key-u>',upload_key)
-
 
 window.title('My Window')
 
 w_win = window.winfo_screenwidth()
 h_win = window.winfo_screenheight()
 
-#print(w_win,h_win)
+print(w_win,h_win)
 big = str(w_win) + 'x' + str(h_win)
 window.geometry(big) 
 
 w_canvas =int(w_win*0.5)
-h_canvas = int(h_win*0.47)
-
-
+h_canvas = int(h_win*0.45)
+count=0
+senseid = 1
 phoneidstart = 1
 whichpic = 1  #for toplevel
 data = []
@@ -981,7 +922,6 @@ rect_box = [0,0,0,0]  #用于记录矩形位置,画布上的相对位置，而�
 #path = 'C:/Users/37151/Desktop/tkinter/sense1'
 path = os.getcwd() + '/sense1'
 path=path.replace("\\","/")
-senseid = path.split('/')[-1]
 #print(path)
 pathh = tk.StringVar()
 tk.Label(window,text = "目标路径:").place(x=0.0*w_win, y=0.025*h_win, anchor='w')
@@ -1009,7 +949,7 @@ if (img1.shape[0]>img1.shape[1]):
 
 w_img = img1.shape[1]
 h_img = img1.shape[0]
-#print(img_open1)
+print(img_open1)
 
 # img1 = cv2.cvtColor(np.asarray(img_open1), cv2.COLOR_RGB2BGR)
 # img2 = cv2.cvtColor(np.asarray(img_open2), cv2.COLOR_RGB2BGR)
@@ -1028,40 +968,40 @@ box2 = (0, 0, w_canvas*scale, h_canvas*scale)
 box3 = (0, 0, w_canvas*scale, h_canvas*scale)
 box4 = (0, 0, w_canvas*scale, h_canvas*scale)
 
-# tk.Label(text='评分属性：').place(x=0.33*w_win, y=0.025*h_win, anchor='w')
-# cmb = ttk.Combobox(window)
-# cmb.place(x=0.37*w_win, y=0.025*h_win, anchor='w')
-# # 设置下拉菜单中的值
-# cmb['value'] = ('noise','detail','expor','color')
+tk.Label(text='评分属性：').place(x=0.33*w_win, y=0.025*h_win, anchor='w')
+cmb = ttk.Combobox(window)
+cmb.place(x=0.37*w_win, y=0.025*h_win, anchor='w')
+# 设置下拉菜单中的值
+cmb['value'] = ('noise','detail','expor','color')
 
 changeb = tk.Button(window, text='启用框选打分',  command=changemode)
 changeb.place(x=0.25*w_win, y=0.025*h_win, anchor='w')
 
 
-# tk.Label(text='1',bg='green',font=('Arial', 25)).place(x=0.03*w_win, y=0.974*h_win, anchor='w')
-# var1 = tk.DoubleVar()  
-# var1.set(2.5) 
-# #mark1 = tk.Scale(window,from_=0,  to=5,  resolution=0.5, orient=tk.HORIZONTAL , variable=var1 ,length = 300,showvalue=1,tickinterval=0.5)
-# mark1 = tk.Scale(window,from_=0,  to=5,  resolution=0.5, orient=tk.HORIZONTAL , variable=var1 ,length = 400,showvalue=0,tickinterval=0.5)
-# mark1.place(x=0.05*w_win, y=0.975*h_win, anchor='w')
+tk.Label(text='1',bg='green',font=('Arial', 25)).place(x=0.03*w_win, y=0.974*h_win, anchor='w')
+var1 = tk.DoubleVar()  
+var1.set(2.5) 
+#mark1 = tk.Scale(window,from_=0,  to=5,  resolution=0.5, orient=tk.HORIZONTAL , variable=var1 ,length = 300,showvalue=1,tickinterval=0.5)
+mark1 = tk.Scale(window,from_=0,  to=5,  resolution=0.5, orient=tk.HORIZONTAL , variable=var1 ,length = 400,showvalue=0,tickinterval=0.5)
+mark1.place(x=0.05*w_win, y=0.975*h_win, anchor='w')
 
-# tk.Label(text='2',bg='green',font=('Arial', 25)).place(x=0.28*w_win, y=0.974*h_win, anchor='w')
-# var2 = tk.DoubleVar()
-# var2.set(2.5) 
-# mark2 = tk.Scale(window,from_=0,  to=5,  resolution=0.5, orient=tk.HORIZONTAL , variable=var2,length = 400,showvalue=0,tickinterval=0.5)
-# mark2.place(x=0.3*w_win, y=0.975*h_win, anchor='w')
+tk.Label(text='2',bg='green',font=('Arial', 25)).place(x=0.28*w_win, y=0.974*h_win, anchor='w')
+var2 = tk.DoubleVar()
+var2.set(2.5) 
+mark2 = tk.Scale(window,from_=0,  to=5,  resolution=0.5, orient=tk.HORIZONTAL , variable=var2,length = 400,showvalue=0,tickinterval=0.5)
+mark2.place(x=0.3*w_win, y=0.975*h_win, anchor='w')
 
-# tk.Label(text='3',bg='green',font=('Arial', 25)).place(x=0.53*w_win, y=0.974*h_win, anchor='w')
-# var3 = tk.DoubleVar()  
-# var3.set(2.5) 
-# mark3 = tk.Scale(window,from_=0,  to=5,  resolution=0.5, orient=tk.HORIZONTAL , variable=var3,length = 400,showvalue=0,tickinterval=0.5)
-# mark3.place(x=0.55*w_win, y=0.975*h_win, anchor='w')
+tk.Label(text='3',bg='green',font=('Arial', 25)).place(x=0.53*w_win, y=0.974*h_win, anchor='w')
+var3 = tk.DoubleVar()  
+var3.set(2.5) 
+mark3 = tk.Scale(window,from_=0,  to=5,  resolution=0.5, orient=tk.HORIZONTAL , variable=var3,length = 400,showvalue=0,tickinterval=0.5)
+mark3.place(x=0.55*w_win, y=0.975*h_win, anchor='w')
 
-# tk.Label(text='4',bg='green',font=('Arial', 25)).place(x=0.78*w_win, y=0.974*h_win, anchor='w')
-# var4 = tk.DoubleVar() 
-# var4.set(2.5) 
-# mark4 = tk.Scale(window,from_=0,  to=5,  resolution=0.5, orient=tk.HORIZONTAL , variable=var4,length = 400,showvalue=0,tickinterval=0.5)
-# mark4.place(x=0.8*w_win, y=0.975*h_win, anchor='w')
+tk.Label(text='4',bg='green',font=('Arial', 25)).place(x=0.78*w_win, y=0.974*h_win, anchor='w')
+var4 = tk.DoubleVar() 
+var4.set(2.5) 
+mark4 = tk.Scale(window,from_=0,  to=5,  resolution=0.5, orient=tk.HORIZONTAL , variable=var4,length = 400,showvalue=0,tickinterval=0.5)
+mark4.place(x=0.8*w_win, y=0.975*h_win, anchor='w')
 
 #纵横填充
 if(w_img/h_img < w_win/h_win):
@@ -1082,19 +1022,19 @@ image_file4 = create(img_open4,box4)
 
 canvas1 = tk.Canvas(window, height=h_canvas, width=w_canvas)
 image1 = canvas1.create_image(w_canvas, h_canvas, anchor='se',image=image_file1)  
-canvas1.place(x=0.5*w_win, y=0.52*h_win, anchor='se')
+canvas1.place(x=0.5*w_win, y=0.5*h_win, anchor='se')
 
 canvas2 = tk.Canvas(window,height=h_canvas, width=w_canvas)
 image2 = canvas2.create_image(0, h_canvas, anchor='sw',image=image_file2)     
-canvas2.place(x=0.5*w_win, y=0.52*h_win, anchor='sw')
+canvas2.place(x=0.5*w_win, y=0.5*h_win, anchor='sw')
 
 canvas3 = tk.Canvas(window, height=h_canvas, width=w_canvas)
 image3 = canvas3.create_image(w_canvas, 0, anchor='ne',image=image_file3)     
-canvas3.place(x=0.5*w_win, y=0.52*h_win, anchor='ne')
+canvas3.place(x=0.5*w_win, y=0.5*h_win, anchor='ne')
 
 canvas4 = tk.Canvas(window, height=h_canvas, width=w_canvas)
 image4 = canvas4.create_image(0, 0, anchor='nw',image=image_file4)  
-canvas4.place(x=0.5*w_win, y=0.52*h_win, anchor='nw')
+canvas4.place(x=0.5*w_win, y=0.5*h_win, anchor='nw')
 
 rect1 = canvas1.create_rectangle(0, 0, 1, 1)
 rect2 = canvas2.create_rectangle(0, 0, 1, 1)
@@ -1106,8 +1046,8 @@ canvas3.delete(rect3)
 canvas4.delete(rect4)
 
 
-# b = tk.Button(window, text='上传打分(ctrl+u)', font=('Arial', 12), command=upload)
-# b.place(x=0.61*w_win, y=0.025*h_win, anchor='w')
+b = tk.Button(window, text='上传打分(ctrl+u)', font=('Arial', 12), command=upload)
+b.place(x=0.61*w_win, y=0.025*h_win, anchor='w')
 
 b0= tk.Button(window, text='对齐(ctrl+m)', font=('Arial', 12),command=update)
 b0.place(x=0.51*w_win, y=0.025*h_win, anchor='w')
@@ -1138,7 +1078,7 @@ window.bind('<Control-Key-s>',save_key)
 window.bind('<Double-Button-1>',display)
 window.bind('<Control-Right>',next_key)
 window.bind('<Control-Left>',previous_key)
-window.bind("<3>",marking)
+
 
 #window.attributes("-topmost",True)
 window.mainloop()
