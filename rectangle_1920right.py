@@ -62,7 +62,7 @@ def selectPath():
         path = tkinter.filedialog.askdirectory()
     pathh.set(path)
     filesname = getfilesname(path)
-    senseid += 1
+    senseid = path.split('/')[-1]
     phoneidstart = 1
 
     # #用于match算法
@@ -959,7 +959,7 @@ window.geometry(big)
 w_canvas =int(w_win*0.5)
 h_canvas = int(h_win*0.47)
 
-senseid = 1
+
 phoneidstart = 1
 whichpic = 1  #for toplevel
 data = []
@@ -972,6 +972,7 @@ rect_box = [0,0,0,0]  #用于记录矩形位置,画布上的相对位置，而�
 path = os.getcwd() + '/sense1'
 path=path.replace("\\","/")
 print(path)
+senseid = path.split('/')[-1]
 pathh = tk.StringVar()
 tk.Label(window,text = "目标路径:").place(x=0.0*w_win, y=0.025*h_win, anchor='w')
 tk.Entry(window, textvariable = pathh).place(x=0.035*w_win, y=0.025*h_win,width = 251, anchor='w')
