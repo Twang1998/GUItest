@@ -1,0 +1,5 @@
+senseid,phoneid,path,area,arrtibute,score
+2,1,C:/Users/37151/Desktop/tkinter/sense2/1.jpg,"(1271, 1099, 2551, 1819)",noise,3.0
+2,2,C:/Users/37151/Desktop/tkinter/sense2/2.jpg,"(1465, 1275, 2745, 1995)",noise,3.0
+2,3,C:/Users/37151/Desktop/tkinter/sense2/3.jpg,"(1481, 1293, 2761, 2013)",noise,2.5
+2,4,C:/Users/37151/Desktop/tkinter/sense2/4.jpg,"(1406, 1240, 2686, 1960)",noise,5.0
