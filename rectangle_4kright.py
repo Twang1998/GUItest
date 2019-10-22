@@ -52,7 +52,9 @@ def selectPath():
     global whole_imagefile1,whole_imagefile2,whole_imagefile3,whole_imagefile4  #用于双击弹出图片
     global data
     global flag
-    
+    global rect_box
+
+    rect_box = [0,0,0,0]
     if(data != []):
         save()
     oldpath = path
@@ -126,8 +128,8 @@ def selectPath():
         changemode()
 
 #测试函数，无用
-def print_selection():
-    print('you have selected ' + var.get())
+# def print_selection():
+#     print('you have selected ' + var.get())
 
 #原始图片通过Image.open加载，之后通过次函数，可以生成用于展示的imagefile
 #注意，该函数包含全局变量，包含resize操作，慎用！！！
@@ -145,10 +147,13 @@ def create(img_open,box):
 #不要重复叠图片，会增加资源消耗
 def putimage():
     #global canvas1,canvas2,canvas3,canvas4
-    global image1,image2,image3,image4
+
     global box
     global w_canvas,h_canvas,maxscale
+    global image1,image2,image3,image4
+    # global rect_box
 
+    # rect_box = [0,0,0,0]
     canvas1.delete(image1)
     canvas2.delete(image2)
     canvas3.delete(image3)
@@ -387,6 +392,9 @@ def next():
     global w_canvas,h_canvas,maxscale
     global phoneidstart
     global whole_imagefile1,whole_imagefile2,whole_imagefile3,whole_imagefile4,w_win,h_win,w_img,h_img #用于双击弹窗
+    global rect_box
+
+    rect_box = [0,0,0,0]
     scale =maxscale
     box = (0, 0, w_canvas*scale, h_canvas*scale)    
     box2 = box
@@ -438,6 +446,9 @@ def next_key(event):
     global phoneidstart
     global flag
     global whole_imagefile1,whole_imagefile2,whole_imagefile3,whole_imagefile4,w_win,h_win,w_img,h_img #用于双击弹窗
+    global rect_box
+
+    rect_box = [0,0,0,0]
     scale =maxscale
     box = (0, 0, w_canvas*scale, h_canvas*scale)    
     box2 = box
@@ -492,6 +503,9 @@ def previous():
     global phoneidstart
     global flag
     global whole_imagefile1,whole_imagefile2,whole_imagefile3,whole_imagefile4,w_win,h_win,w_img,h_img #用于双击弹窗
+    global rect_box
+
+    rect_box = [0,0,0,0]
     scale =maxscale
     box = (0, 0, w_canvas*scale, h_canvas*scale)    
     box2 = box
@@ -539,6 +553,9 @@ def previous_key(event):
     global phoneidstart
     global flag
     global whole_imagefile1,whole_imagefile2,whole_imagefile3,whole_imagefile4,w_win,h_win,w_img,h_img #用于双击弹窗
+    global rect_box
+
+    rect_box = [0,0,0,0]
     scale =maxscale
     box = (0, 0, w_canvas*scale, h_canvas*scale)    
     box2 = box
@@ -751,6 +768,7 @@ def save():
 def save_key(event):
     global path
     global data
+    global senseid
     data = sorted(data)
     jsonfile=open(path+'/'+senseid+'.json','w')
     dataa = []
@@ -987,7 +1005,7 @@ pathh = tk.StringVar()
 tk.Label(window,text = "目标路径:").place(x=0.0*w_win, y=0.025*h_win, anchor='w')
 tk.Entry(window, textvariable = pathh).place(x=0.035*w_win, y=0.025*h_win,width = 251, anchor='w')
 tk.Button(window, text = "路径选择", command = selectPath).place(x=0.2*w_win, y=0.025*h_win, anchor='w')
-
+pathh.set(path)
 filesname=getfilesname(path)
 
 img1 = cv2.imread(filesname[0],0)
@@ -1133,7 +1151,7 @@ window.bind("<MouseWheel>",scaler)
 window.bind("<B1-Motion>",drag)
 window.bind("<ButtonRelease-1>",locclear)
 window.bind('<Control-Key-m>',update_key)
-window.bind('<Control-Key-u>',upload_key)
+# window.bind('<Control-Key-u>',upload_key)
 window.bind('<Control-Key-s>',save_key)
 window.bind('<Double-Button-1>',display)
 window.bind('<Control-Right>',next_key)
